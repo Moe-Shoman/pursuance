@@ -1,24 +1,50 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
 
-class App extends Component {
+import Header from './components/Header.js'
+import SaveTaskForm from './components/SaveTaskForm.js'
+
+import store from './store.js'
+
+class TaskApp extends Component {
+  constructor(props){
+    super(props)
+
+    this.onSaveTask = this.onSaveTask.bind(this)
+    this.onChange = this.onChange.bind(this)
+  }
+
+  onSaveTask(event){
+    event.preventDefault()
+    console.log(event.target);
+
+    // FIXME: This doesn't add a new task, but should
+    store.dispatch({
+      type: 'ADD_TASK',
+      ...event.target,
+    })
+  }
+
+  // TODO: Remove this method
+  onChange(fieldName, event){
+    console.log("Change:", fieldName, event.target.value)
+  }
+
   render() {
     return (
       <div className="App" style={{textAlign: 'center'}}>
-        <div className="App-header" style={{backgroundColor: '#222',
-                                            height: '150px',
-                                            padding: '20px',
-                                            color: 'white'}}>
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+        <Header />
+
+        <div className="App-contents" style={{textAlign: 'left',
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              justifyContent: 'flex-start'}}>
+          <SaveTaskForm
+            onChange={this.onChange}
+            onSaveTask={this.onSaveTask} />
         </div>
-        <p className="App-intro" style={{fontSize: 'large'}}>
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default TaskApp
